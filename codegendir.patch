@@ -1,0 +1,22 @@
+--- gwyddion-2.48-orig/configure	2018-05-07 08:59:43.265593370 -0400
++++ gwyddion-2.48/configure	2018-05-07 08:58:29.493160706 -0400
+@@ -18304,7 +18304,7 @@
+ 
+ 
+   if test "x$PYGTK_CODEGENDIR" = 'x'; then
+-    PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygtk-2.0`
++    PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygobject-2.0`
+   fi
+ 
+ fi
+--- gwyddion-2.48-orig/configure.ac	2018-05-07 08:59:43.247593265 -0400
++++ gwyddion-2.48/configure.ac	2018-05-07 08:58:04.162011271 -0400
+@@ -268,7 +268,7 @@
+   AC_SUBST(PYGTK_CFLAGS)
+   AC_SUBST(PYGTK_LIBS)
+   if test "x$PYGTK_CODEGENDIR" = 'x'; then
+-    PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygtk-2.0`
++    PYGTK_CODEGENDIR=`$PKG_CONFIG --variable=codegendir pygobject-2.0`
+   fi
+   AC_SUBST(PYGTK_CODEGENDIR)
+ fi
