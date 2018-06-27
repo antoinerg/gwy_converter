@@ -4,34 +4,37 @@ import os
 import gwy
 import json
 import pickle
+import requests
 
-# Load gwy file
 path = sys.argv[1]
-print("Loading '%s'" % path)
-container = gwy.gwy_file_load(path, gwy.RUN_NONINTERACTIVE)
 
-# Hash files
-import hashlib
-BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
+# Helpers
+def download_file(url):
+    print("Downloading %s" % url)
+    local_filename = url.split('/')[-1]
+    # NOTE the stream=True parameter
+    r = requests.get(url, stream=True)
+    with open(local_filename, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk: # filter out keep-alive new chunks
+                f.write(chunk)
+                #f.flush() commented by recommendation from J.F.Sebastian
+    return local_filename
 
-sha1 = hashlib.sha1()
-
-with open(path, 'r') as f:
-    while True:
-        data = f.read(BUF_SIZE)
-        if not data:
-            break
-        sha1.update(data)
-
-file_hash = sha1.hexdigest()
+# Main program
+## Create output folder
 output_folder = "."
-print("SHA1: {0}".format(file_hash))
-
-# Create output folder
 try:
     os.makedirs("%s/" % (output_folder))
 except OSError as exc:
     pass
+
+## Download file
+raw_file=download_file("http://localhost:8080%s" % path)
+
+# Load gwy file
+print("Gwyddion loading '%s'" % raw_file)
+container = gwy.gwy_file_load(raw_file, gwy.RUN_NONINTERACTIVE)
 
 # Add to data browser to inspect
 gwy.gwy_app_data_browser_add(container)
@@ -39,7 +42,9 @@ gwy.gwy_app_data_browser_add(container)
 # List all images
 ids = gwy.gwy_app_data_browser_get_data_ids(container)
 for i in ids:
-    os.makedirs("%s/channel/%02d/" % (output_folder,i))
+    channel_folder = "%s/channel/%02d/" % (output_folder,i)
+    os.makedirs(channel_folder)
+    print("Created folder '%s'" % channel_folder)
     # Channel metadata
     ch_meta = {}
 

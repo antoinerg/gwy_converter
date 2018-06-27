@@ -11,6 +11,7 @@ rec {
       python
       python2Packages.pygtk
       python2Packages.pygobject2
+      python2Packages.requests
     ];
 
     unpackPhase = "true";
