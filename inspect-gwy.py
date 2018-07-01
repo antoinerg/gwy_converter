@@ -41,6 +41,7 @@ gwy.gwy_app_data_browser_add(container)
 
 # List all images
 ids = gwy.gwy_app_data_browser_get_data_ids(container)
+
 for i in ids:
     channel_folder = "%s/channel/%02d/" % (output_folder,i)
     os.makedirs(channel_folder)
