@@ -77,10 +77,11 @@ for i in ids:
     gwy.gwy_file_save(container, "%s/channel/%02d/image.png" % (output_folder,i), gwy.RUN_NONINTERACTIVE)
 
     # Save pickle
-    data = data_field.get_data()
-    file = open("%s/channel/%02d/image.p" % (output_folder,i), "w" )
-    pickle.dump(data,file)
-    file.close()
+    #data = data_field.get_data()
+    #file = open("%s/channel/%02d/image.p" % (output_folder,i), "w" )
+    #pickle.dump(data,file)
+    #file.close()
+
     # Save metadata
     file = open("%s/channel/%02d/image.json" % (output_folder,i), "w" )
     json.dump(ch_meta,file)
