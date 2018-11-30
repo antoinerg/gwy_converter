@@ -30,7 +30,8 @@ except OSError as exc:
     pass
 
 ## Download file
-raw_file=download_file("http://localhost:8080%s" % path)
+#raw_file=download_file("http://127.0.0.1:8080%s" % path)
+raw_file = path
 
 # Load gwy file
 print("Gwyddion loading '%s'" % raw_file)
@@ -38,6 +39,18 @@ container = gwy.gwy_file_load(raw_file, gwy.RUN_NONINTERACTIVE)
 
 # Add to data browser to inspect
 gwy.gwy_app_data_browser_add(container)
+
+# Save metadata to image.json
+image_folder = output_folder
+image_meta = {}
+image_meta["type"] = "inspect-gwy"
+meta = container["/0/meta"]
+for entry in meta.keys_by_name():
+    image_meta[entry] = meta[entry]
+    #print('%s:%s' % (entry,meta[entry]))
+file = open("%s/image.json" % (image_folder), "w" )
+json.dump(image_meta,file)
+file.close()
 
 # List all images
 ids = gwy.gwy_app_data_browser_get_data_ids(container)
@@ -52,13 +65,7 @@ for i in ids:
     # Get channel title
     title = container["/%d/data/title" % i]
     ch_meta["title"] = title
-
-    # Get channel metadata
-    meta = container["/%d/meta" % i]
-
-    for entry in meta.keys_by_name():
-        ch_meta[entry] = meta[entry]
-        #print('%s:%s' % (entry,meta[entry]))
+    ch_meta["index"] = i
 
     # Select the channel
     gwy.gwy_app_data_browser_select_data_field(container, i)
@@ -84,7 +91,7 @@ for i in ids:
     #file.close()
 
     # Save metadata
-    file = open("%s/channel/%02d/image.json" % (output_folder,i), "w" )
+    file = open("%s/channel/%02d/channel.json" % (output_folder,i), "w" )
     json.dump(ch_meta,file)
     file.close()
 

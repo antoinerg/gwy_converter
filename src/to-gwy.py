@@ -28,7 +28,8 @@ except OSError as exc:
     pass
 
 ## Download file
-rawFile = download_file("http://localhost:8080/%s" % path)
+#rawFile = download_file("http://127.0.0.1:8080%s" % path)
+rawFile = path
 
 ## Gywddion load
 print("Gwyddion loading %s" % rawFile)
