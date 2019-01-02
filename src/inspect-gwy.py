@@ -8,19 +8,6 @@ import requests
 
 path = sys.argv[1]
 
-# Helpers
-def download_file(url):
-    print("Downloading %s" % url)
-    local_filename = url.split('/')[-1]
-    # NOTE the stream=True parameter
-    r = requests.get(url, stream=True)
-    with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk: # filter out keep-alive new chunks
-                f.write(chunk)
-                #f.flush() commented by recommendation from J.F.Sebastian
-    return local_filename
-
 # Main program
 ## Create output folder
 output_folder = "."
@@ -30,7 +17,6 @@ except OSError as exc:
     pass
 
 ## Download file
-#raw_file=download_file("http://127.0.0.1:8080%s" % path)
 raw_file = path
 
 # Load gwy file
@@ -52,7 +38,7 @@ file = open("%s/image.json" % (image_folder), "w" )
 json.dump(image_meta,file)
 file.close()
 
-# List all images
+# List all channels
 ids = gwy.gwy_app_data_browser_get_data_ids(container)
 
 for i in ids:
@@ -81,14 +67,27 @@ for i in ids:
     avg, ra, rms, skew, kurtosis = data_field.get_stats()
     #print '%s:%s\t%g\t%g\t%g\t%g' % (path, i, ra, rms, skew, kurtosis)
 
-    # Save PNG thumbnail
-    gwy.gwy_file_save(container, "%s/channel/%02d/image.png" % (output_folder,i), gwy.RUN_NONINTERACTIVE)
+    data = data_field.get_data()
+
+    # from array import array
+    # output_file = open("%s/channel/%02d/binary" % (output_folder,i), 'wb')
+    # float_array = array('d', data)
+    # float_array.tofile(output_file)
+    # output_file.close()
+
+    # Save into JSON
+    ch_meta["data"] = data
 
     # Save pickle
-    #data = data_field.get_data()
     #file = open("%s/channel/%02d/image.p" % (output_folder,i), "w" )
     #pickle.dump(data,file)
     #file.close()
+
+    # Save binary data
+    #data = data_field.get_data()
+
+    # Save PNG thumbnail
+    gwy.gwy_file_save(container, "%s/channel/%02d/image.png" % (output_folder,i), gwy.RUN_NONINTERACTIVE)
 
     # Save metadata
     file = open("%s/channel/%02d/channel.json" % (output_folder,i), "w" )

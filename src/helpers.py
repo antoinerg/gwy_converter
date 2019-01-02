@@ -1,0 +1,14 @@
+#! /usr/bin/env python2
+
+# Helpers
+def download_file(url):
+    print("Downloading %s" % url)
+    local_filename = url.split('/')[-1]
+    # NOTE the stream=True parameter
+    r = requests.get(url, stream=True)
+    with open(local_filename, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk: # filter out keep-alive new chunks
+                f.write(chunk)
+                #f.flush() commented by recommendation from J.F.Sebastian
+    return local_filename
