@@ -1,11 +1,12 @@
 with import <nixpkgs>{};
+
+{filename ? "23-10-2015.fcc16s1.028.sxm"}:
 let
   inherit (import ./default.nix) gwyddion-pygwy gwyddion-converter;
-  filename = /rpool/lab/data/lt-afm/nanonis/2015-10-06-fcc16s1/raw/23-10-2015.fcc16s1.028.sxm;
-  name = "23-10-2015.fcc16s1.028.sxm";
+  path = /rpool/lab/data/lt-afm/nanonis/2015-10-06-fcc16s1/raw + "/${filename}";
 in
 stdenv.mkDerivation {
-  name = "convert-${name}";
+  name = "convert-${filename}";
 
   buildInputs = [ gwyddion-pygwy  ];
   propagatedBuildInputs = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cd $out
-    xvfb-run -a ${gwyddion-converter}/bin/to-gwy ${filename}
+    xvfb-run -a ${gwyddion-converter}/bin/to-gwy ${path}
     xvfb-run -a ${gwyddion-converter}/bin/inspect-gwy data.gwy
     # cp data.gwy $out/
     # cp -r channel $out/
