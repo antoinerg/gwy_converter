@@ -3,7 +3,7 @@ with import <nixpkgs>{};
 {filename ? "23-10-2015.fcc16s1.028.sxm"}:
 let
   inherit (import ./default.nix) gwyddion-pygwy gwyddion-converter;
-  path = /rpool/lab/data/lt-afm/nanonis/2015-10-06-fcc16s1/raw + "/${filename}";
+  path = /rpool/lab/data/lt-afm/nanonis + "/${filename}";
 in
 stdenv.mkDerivation {
   name = "convert-${filename}";
