@@ -6,7 +6,7 @@ let
   path = /rpool/lab/data/lt-afm/nanonis + "/${filename}";
 in
 stdenv.mkDerivation {
-  name = "convert-${filename}";
+  name = "convert-${baseNameOf filename}";
 
   buildInputs = [ gwyddion-pygwy  ];
   propagatedBuildInputs = [
