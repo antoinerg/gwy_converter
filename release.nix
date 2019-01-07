@@ -1,6 +1,6 @@
 with import <nixpkgs>{};
 
-{filename ? "23-10-2015.fcc16s1.028.sxm"}:
+{filename}:
 let
   inherit (import ./default.nix) gwyddion-pygwy gwyddion-converter;
   path = /rpool/lab/data/lt-afm/nanonis + "/${filename}";
