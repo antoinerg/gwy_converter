@@ -1,12 +1,11 @@
 with import <nixpkgs>{};
 
-{filename}:
+{path}:
 let
   inherit (import ./default.nix) gwyddion-pygwy gwyddion-converter;
-  path = /rpool/lab/data/lt-afm/nanonis + "/${filename}";
 in
 stdenv.mkDerivation {
-  name = "convert-${baseNameOf filename}";
+  name = "convert-${baseNameOf path}";
 
   buildInputs = [ gwyddion-pygwy  ];
   propagatedBuildInputs = [
