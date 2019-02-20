@@ -38,17 +38,18 @@ rec {
     patches = [ ./codegendir.patch ];
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [
+    propagatedBuildInputs = [
       python
       python2Packages.pygtk
       python2Packages.pygobject2
       glib gnome2.gtksourceview
 
-      # For openGL
+      /*
+      For openGL
       gnome2.gtkglext
       mesa_glu mesa_glu.dev
       xorg.libXt xorg.libXmu xorg.libXt xorg.libICE xorg.libSM
-
+      */
     ];
 
     meta = {

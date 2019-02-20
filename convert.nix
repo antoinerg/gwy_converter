@@ -3,12 +3,12 @@ with import <nixpkgs>{};
 {path}:
 let
   inherit (import ./default.nix) gwyddion-pygwy gwyddion-converter;
+  filepath = /. + path;
 in
 stdenv.mkDerivation {
-  name = "convert-${baseNameOf path}";
+  name = "convert-${baseNameOf filepath}";
 
-  buildInputs = [ gwyddion-pygwy  ];
-  propagatedBuildInputs = [
+  buildInputs = [
     gwyddion-pygwy
     xvfb_run
   ];
@@ -18,9 +18,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cd $out
-    xvfb-run -a ${gwyddion-converter}/bin/to-gwy ${path}
+    xvfb-run -a ${gwyddion-converter}/bin/to-gwy ${filepath}
     xvfb-run -a ${gwyddion-converter}/bin/inspect-gwy data.gwy
-    # cp data.gwy $out/
-    # cp -r channel $out/
   '';
 }
