@@ -10,7 +10,7 @@ Uses Nix to produce artefacts in a completely reproducible fashion.
 $ git clone https://github.com/antoinerg/gwy_converter
 $ cd gwy_converter
 $ # the path argument has to be an absolute path!
-$ nix-build convert.nix --argstr path "/path/afm_file.sxm"
+$ nix-build convert.nix --argstr path "/absolute_path_to_afm_file.sxm"
 $ tree result
 result
 ├── channel
