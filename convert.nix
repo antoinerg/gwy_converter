@@ -1,12 +1,26 @@
 with import <nixpkgs>{};
 
-{path}:
+{path ? "", url ? "", sha256 ? ""}:
 let
   inherit (import ./default.nix) gwyddion-pygwy gwyddion-converter;
-  filepath = /. + path;
+
+  filepath =
+    if (path != "") then
+      /. + path
+    else if (url != "" && sha256 != "") then
+      fetchurl {
+        name = sha256;
+        url = url;
+        sha256 = sha256;
+      }
+    else throw ''
+      Cannot retrieve file. Either provide a path to the file to convert as argument `path`
+      or a URL and sha256 signature of it as arguments `url` and `sha256`
+    '';
 in
 stdenv.mkDerivation {
-  name = "convert-${baseNameOf filepath}";
+  # name = "convert-${baseNameOf filepath}";
+  name = "gwy_converter";
 
   buildInputs = [
     gwyddion-pygwy

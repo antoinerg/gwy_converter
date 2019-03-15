@@ -4,11 +4,15 @@ Uses Gwyddion to convert SPM (scanning probe microscopy) files into well-support
 
 Uses Nix to produce artefacts in a completely reproducible fashion.
 
-## Usage
+## Installation and usage
 
 ```bash
 $ git clone https://github.com/antoinerg/gwy_converter
 $ cd gwy_converter
+```
+
+### Convert local files
+```bash
 $ # the path argument has to be an absolute path!
 $ nix-build convert.nix --argstr path "/absolute_path_to_afm_file.sxm"
 $ tree result
@@ -33,7 +37,16 @@ result
 23 directories, 46 files
 ```
 
-### About gwyddion on NixOS
+### Convert files served via HTTP
+```bash
+$ nix-build convert.nix \
+  --argstr url "http://localhost:8080/ipfs/QmaEApiJT26NSF4MWhMBuyxno5zP2ifNBqNkoQSLX8Vb7r" \
+  --argstr sha256 "a263a06015c02e292b3a6a6817c0c68dba047eec8a4dc463e6d240cc827c9369"
+```
+
+## Development
+
+### About running Gwyddion on NixOS
 
 In order to compile Gwyddion with pygwy module under NixOS,
 we need to patch the configure script as [shown here](https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/python-modules/pygtksourceview).
